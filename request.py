@@ -1,4 +1,5 @@
 import requests
+from bs4 import BeautifulSoup
 
 def get_agrofit_cropid(crop):
     agrofit_crops = {
@@ -22,6 +23,18 @@ def get_agrofit_prodtid(product):
     }
     return agrofit_products[product]
 
+def html_to_dict(html):
+    html = BeautifulSoup(html,'html.parser').find('table',class_ = 'P')
+    rows= html.find_all('tr')[1:]                   
+    data = []                                       
+    for row in rows:                                
+        columns = row.find_all('td')                
+        data.append( {                              
+            "Principio Ativo": columns[0].getText(),
+            "Grupo Quimico": columns [1].getText(), 
+            "Classe": columns[2].getText()          
+            })                                      
+    return data                                     
 
 def agrofit_request(crop,product): 
     product_id = get_agrofit_prodtid(product)
@@ -47,9 +60,15 @@ def agrofit_request(crop,product):
             }
             response = s.post(url, 
                               data=payload).text
-            html_dict[f"{i}"] = response
+            html_dict[f"{i}"] = html_to_dict(response)
     return html_dict
 
 
-print(agrofit_request("soja","herbicidas"))
+test = agrofit_request("milho","herbicidas")
+print(test)
+
+
+
+
+
 
