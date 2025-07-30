@@ -39,14 +39,6 @@ def html_to_dict(html):
     except:
         print("MEU IRMAO ALGO DEU ERRADO AI, SE VIRA.")
         pass                                       
-    
-    
-    
-    
-    
-    
-    
-    
 
 def agrofit_request(crop,product): 
     product_id = get_agrofit_prodtid(product)
