@@ -24,17 +24,29 @@ def get_agrofit_prodtid(product):
     return agrofit_products[product]
 
 def html_to_dict(html):
+    data = []
     html = BeautifulSoup(html,'html.parser').find('table',class_ = 'P')
-    rows= html.find_all('tr')[1:]                   
-    data = []                                       
-    for row in rows:                                
-        columns = row.find_all('td')                
-        data.append( {                              
-            "Principio Ativo": columns[0].getText(),
-            "Grupo Quimico": columns [1].getText(), 
-            "Classe": columns[2].getText()          
-            })                                      
-    return data                                     
+    try:
+        rows= html.find_all('tr')[1:]
+        for row in rows:                                
+            columns = row.find_all('td')                
+            data.append( {                              
+                "Principio Ativo": columns[0].getText(),
+                "Grupo Quimico": columns [1].getText(), 
+                "Classe": columns[2].getText()          
+                })                                      
+        return data                                     
+    except:
+        print("MEU IRMAO ALGO DEU ERRADO AI, SE VIRA.")
+        pass                                       
+    
+    
+    
+    
+    
+    
+    
+    
 
 def agrofit_request(crop,product): 
     product_id = get_agrofit_prodtid(product)
@@ -48,7 +60,7 @@ def agrofit_request(crop,product):
         }
     with requests.Session() as s:
         s.headers.update(headers)
-        for i in range(0,11):
+        for i in range(0,10):
             payload = {
                 "p_id_ingrediente_ativo": "",
                 "p_nm_comum_port": "",
@@ -64,11 +76,5 @@ def agrofit_request(crop,product):
     return html_dict
 
 
-test = agrofit_request("milho","herbicidas")
+test = agrofit_request("mandioca","herbicidas")
 print(test)
-
-
-
-
-
-
